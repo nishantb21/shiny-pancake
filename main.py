@@ -4,16 +4,31 @@ from helper import _get_sample
 
 import torch
 
+# CONSTANTS
 SAMPLE_RATE = 16000
+BATCH_SIZE = 1
+EPOCHS = 1
 
-m = ModelA()
-inp, _ = _get_sample("org.flac", resample=SAMPLE_RATE)
-inp = inp[:, :SAMPLE_RATE]
-inp = torch.unsqueeze(inp, dim=0)
+# Dataset object
+# TODO: Add parameters
+# TODO: Uncomment the clean speech
 
-print(inp.shape)
+# TODO: Convert Dataset object to Dataloader
 
-output = m(inp)
-output = torch.nn.AvgPool1d(2)(output)
+# TODO: Define the model (!leave this part)
 
-print(output.shape)
+# TODO: Define your loss function
+
+# TODO: Set up optimizer
+# torch.optim.SGD(model.paramters())
+
+# TODO: Training loop
+
+# for batch in dataloader_object:
+#     noisy_batch, clean_batch = batch
+    # optimizer.zero_grad()
+
+    # TODO: Feed noisy into model
+    # TODO: Compute loss between the output and clean_batch
+    # TODO: Compute gradients: loss.backward()
+    # TODO: Apply them to the network: optimizer.step()
