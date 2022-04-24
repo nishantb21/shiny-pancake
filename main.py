@@ -1,34 +1,33 @@
 from sklearn.utils import resample
-from model import ModelA
-from helper import _get_sample
-
+from torch.utils.data import DataLoader
+from torch.nn import MSELoss
+from torch.optim import SGD
 import torch
+
+from model import ModelA, ModelB
+from helper import _get_sample
+from dataset import CustomDataset
 
 # CONSTANTS
 SAMPLE_RATE = 16000
 BATCH_SIZE = 1
 EPOCHS = 1
+noisy_path = "assets/noisySpeech"
+clean_path = "assets/cleanSpeech"
 
-# Dataset object
-# TODO: Add parameters
-# TODO: Uncomment the clean speech
+dataset = CustomDataset(noisy_path, clean_path)
+dataloader = DataLoader(dataset,batch_size= BATCH_SIZE, shuffle=True)
 
-# TODO: Convert Dataset object to Dataloader
+model = ModelB()
+criterion = MSELoss()
+optim = SGD(model.parameters())
 
-# TODO: Define the model (!leave this part)
+for batch in dataloader:
+    noisy_batch, clean_batch = batch
+    optim.zero_grad()
 
-# TODO: Define your loss function
-
-# TODO: Set up optimizer
-# torch.optim.SGD(model.paramters())
-
-# TODO: Training loop
-
-# for batch in dataloader_object:
-#     noisy_batch, clean_batch = batch
-    # optimizer.zero_grad()
-
-    # TODO: Feed noisy into model
-    # TODO: Compute loss between the output and clean_batch
-    # TODO: Compute gradients: loss.backward()
-    # TODO: Apply them to the network: optimizer.step()
+    output = model(noisy_batch)
+    loss = criterion(clean_batch, output)
+    loss.backward()
+    print("Loss: ", loss.item())
+    optim.step()
